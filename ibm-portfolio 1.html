@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBM Portfolio — Storage & Power 2026</title>
+<style>
+  /* ── Reset & Base ─────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:   #13294B;
+    --teal:   #006272;
+    --ibmblue:#0043CE;
+    --red:    #C8102E;
+    --white:  #FFFFFF;
+    --light:  #F4F7FB;
+    --mgray:  #8A8A8A;
+    --border: #DDE3ED;
+    --hdr:    #1E4A7A;
+    --alt:    #EBF2FB;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: var(--light);
+    color: #1a1a2e;
+    min-height: 100vh;
+  }
+
+  /* ── Top Nav ──────────────────────────────────────────────────────── */
+  header {
+    background: var(--navy);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,.4);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: .04em;
+  }
+  .logo span { color: #66CCFF; }
+  .nav-year {
+    color: var(--mgray);
+    font-size: .85rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .nav-year img.logo-nexsys { height: 28px; width: auto; display: block; }
+  .nav-year img.logo-ibm    { height: 60px; width: auto; display: block; }
+  footer { position: relative; }
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .footer-inner img.logo-nexsys { height: 28px; width: auto; display: block; }
+  .footer-inner img.logo-ibm    { height: 50px; width: auto; display: block; }
+
+  /* ── Hero ─────────────────────────────────────────────────────────── */
+  .hero {
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 40%, #0a3d6b55 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 20% 80%, #004e8822 0%, transparent 60%),
+      linear-gradient(135deg, #0a1e3c 0%, #0d2a4a 40%, #0a2240 70%, #071b38 100%);
+    padding: 3.5rem 2rem 3rem;
+    text-align: center;
+    border-bottom: 4px solid var(--red);
+    transition: border-bottom-color .2s;
+  }
+  body.cat-active .hero { border-bottom: none; }
+  .hero h1 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -.01em;
+    margin-bottom: .6rem;
+  }
+  .hero h1 span { color: #66CCFF; }
+  .hero p {
+    color: #aac4e8;
+    font-size: 1.05rem;
+    max-width: 640px;
+    margin: 0 auto 2rem;
+  }
+
+  /* ── Category Nav ────────────────────────────────────────────────── */
+  .cat-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .9rem;
+    justify-content: center;
+    margin-top: 1.2rem;
+  }
+  .cat-btn {
+    padding: .75rem 2rem;
+    border: 2px solid rgba(255,255,255,.35);
+    border-radius: 50px;
+    font-size: .95rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #fff;
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(4px);
+    transition: transform .15s, box-shadow .15s, background .15s, border-color .15s;
+    letter-spacing: .02em;
+    white-space: nowrap;
+  }
+  .cat-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.35); background: rgba(255,255,255,.18); }
+  .cat-btn.active {
+    border-color: #fff;
+    background: rgba(255,255,255,.22);
+    box-shadow: 0 0 0 3px rgba(255,255,255,.5);
+  }
+  .cat-btn-ai     { border-color: #0084ff88; }
+  .cat-btn-ai.active     { background: #0043CE; border-color: #fff; }
+  .cat-btn-hybrid { border-color: #00a99d88; }
+  .cat-btn-hybrid.active { background: #006272; border-color: #fff; }
+  .cat-btn-resil  { border-color: #9333ea88; }
+  .cat-btn-resil.active  { background: #7c3aed; border-color: #fff; }
+  .cat-btn-power  { border-color: #f59e0b88; }
+  .cat-btn-power.active  { background: #d97706; border-color: #fff; }
+
+  /* ── Sub-nav bar (product pills inside a category) ───────────────── */
+  .subnav-bar {
+    display: none;
+    background: linear-gradient(135deg, #071829 0%, #0d2240 100%);
+    border-top: 1px solid rgba(255,255,255,.1);
+    border-bottom: 4px solid var(--red);
+    padding: .85rem 1.5rem;
+    animation: fadeIn .2s ease;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .6rem;
+    position: sticky;
+    top: 60px;   /* altura del header */
+    z-index: 90;
+    box-shadow: 0 4px 16px rgba(0,0,0,.35);
+  }
+  .subnav-bar.visible { display: flex; }
+
+  .seg-btn {
+    padding: .55rem 1.4rem;
+    border: 1.5px solid rgba(255,255,255,.4);
+    border-radius: 50px;
+    font-size: .88rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    background: transparent;
+    transition: transform .12s, box-shadow .12s, background .12s;
+    letter-spacing: .02em;
+    white-space: nowrap;
+  }
+  .seg-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.3); background: rgba(255,255,255,.12); }
+  .seg-btn.active {
+    background: rgba(255,255,255,.25);
+    border-color: #fff;
+    box-shadow: 0 0 0 2px rgba(255,255,255,.6);
+  }
+
+  .btn-power   { border-color: #66aaff88; }
+  .btn-flash   { border-color: #00e5cc88; }
+  .btn-scale   { border-color: #c084fc88; }
+  .btn-fusion  { border-color: #a78bfa88; }
+  .btn-swai    { border-color: #f59e0baa; }
+  .btn-swresil { border-color: #f87171aa; }
+  .btn-library { border-color: #67e8f988; }
+
+  /* ── Sections ─────────────────────────────────────────────────────── */
+  .section {
+    display: none;
+    animation: fadeIn .3s ease;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+  .section.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Section Header ───────────────────────────────────────────────── */
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid var(--red);
+  }
+  .sec-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .sec-header h2 { font-size: 1.7rem; font-weight: 800; color: var(--navy); }
+  .sec-header p  { font-size: .95rem; color: var(--mgray); margin-top: .2rem; }
+
+  /* ── Cards grid ───────────────────────────────────────────────────── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem 1.2rem;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .card:hover { box-shadow: 0 8px 24px rgba(19,41,75,.12); transform: translateY(-3px); }
+  .card h3 { font-size: 1.05rem; font-weight: 700; color: var(--navy); margin-bottom: .5rem; }
+  .card p  { font-size: .9rem; color: #444; line-height: 1.6; }
+  .card .tag {
+    display: inline-block;
+    margin-top: .75rem;
+    padding: .2rem .7rem;
+    border-radius: 20px;
+    font-size: .75rem;
+    font-weight: 700;
+  }
+
+  /* ── Info box ─────────────────────────────────────────────────────── */
+  .info-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--ibmblue);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: .95rem;
+    line-height: 1.7;
+    color: #333;
+  }
+  .info-box strong { color: var(--navy); }
+
+  /* ── Two-col layout ───────────────────────────────────────────────── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+  @media(max-width:700px){ .two-col { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem;
+  }
+  .panel h3 {
+    font-size: 1rem; font-weight: 700; color: var(--navy);
+    margin-bottom: .8rem; padding-bottom: .5rem;
+    border-bottom: 2px solid var(--red);
+  }
+  .panel ul { list-style: none; }
+  .panel ul li {
+    padding: .4rem 0 .4rem 1.4rem;
+    position: relative;
+    font-size: .9rem;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 1.5;
+  }
+  .panel ul li:last-child { border-bottom: none; }
+  .panel ul li::before { content: "▸"; position: absolute; left: 0; color: var(--ibmblue); font-weight: 700; }
+
+  /* ── Comparison Table ─────────────────────────────────────────────── */
+  .tbl-wrap { overflow-x: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.08); margin-bottom: 2rem; }
+  table { width: 100%; border-collapse: collapse; min-width: 680px; background: var(--white); }
+  thead th {
+    background: var(--hdr);
+    color: var(--white);
+    padding: .85rem .8rem;
+    font-size: .85rem;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+  }
+  thead th:first-child { text-align: left; background: var(--teal); min-width: 140px; }
+  tbody tr:nth-child(even) { background: var(--alt); }
+  tbody tr:nth-child(odd)  { background: var(--white); }
+  tbody tr:hover           { background: #d4e6ff; }
+  tbody td {
+    padding: .7rem .8rem;
+    font-size: .85rem;
+    color: #333;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody td:first-child { text-align: left; font-weight: 600; color: var(--navy); background: #f0f4fb; }
+  .highlight { color: var(--red); font-weight: 700; }
+
+  /* ── Use-case pills ───────────────────────────────────────────────── */
+  .pills { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
+  .pill {
+    display: flex; align-items: center; gap: .5rem;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--ibmblue);
+    border-radius: 8px;
+    padding: .6rem 1rem;
+    font-size: .88rem;
+    font-weight: 500;
+    color: #222;
+  }
+  .pill .pi { font-size: 1.2rem; }
+
+  /* ── Section divider label ────────────────────────────────────────── */
+  .divlabel {
+    display: flex; align-items: center; gap: .8rem;
+    margin: 2rem 0 1rem;
+    font-size: .8rem; font-weight: 700; text-transform: uppercase;
+    color: var(--mgray); letter-spacing: .08em;
+  }
+  .divlabel::after { content:''; flex:1; height:1px; background: var(--border); }
+
+  /* ── Software modules ─────────────────────────────────────────────── */
+  .mod-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:1rem; margin-bottom:2rem; }
+  .mod-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--teal);
+    border-radius: 10px;
+    padding: 1.2rem;
+  }
+  .mod-card h4 { font-size:.95rem; font-weight:700; color:var(--navy); margin-bottom:.6rem; }
+  .mod-card ul { list-style:none; }
+  .mod-card ul li { font-size:.82rem; color:#444; padding:.25rem 0 .25rem 1.1rem; position:relative; border-bottom:1px solid #f4f4f4; }
+  .mod-card ul li:last-child{border-bottom:none;}
+  .mod-card ul li::before { content:"•"; position:absolute; left:0; color:var(--teal); font-weight:700; }
+
+  /* ── Fusion inner tabs ───────────────────────────────────────────── */
+  .ftab-btn {
+    padding: .5rem 1.4rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--navy);
+    background: var(--white);
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .ftab-btn:hover { background: var(--alt); border-color: #a78bfa; }
+  .ftab-active { background: #7c3aed !important; color: #fff !important; border-color: #7c3aed !important; }
+
+  /* ── Footer ───────────────────────────────────────────────────────── */
+  footer {
+    background: var(--navy);
+    color: #8899aa;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: .82rem;
+    border-top: 3px solid var(--red);
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════════════════════ -->
+<header>
+  <div class="logo">
+    IBM <span>Portfolio</span> 2026
+  </div>
+  <div class="nav-year">
+    <img src="../imagenes/nexsys-logo-dark-2023 2 1 (1).png" alt="Nexsys" class="logo-nexsys">
+  </div>
+</header>
+
+<!-- ══ HERO ════════════════════════════════════════════════════════════════ -->
+<div class="hero">
+  <h1>IBM <span>Storage</span> &amp; Power</h1>
+  <p>Selecciona una categoría y luego el producto para explorar el portafolio IBM 2026.</p>
+
+  <!-- NIVEL 1: Categorías IBM -->
+  <div class="cat-nav">
+    <button class="cat-btn cat-btn-ai"     onclick="showCat('ai')"    >🧠 Storage for Data &amp; AI</button>
+    <button class="cat-btn cat-btn-hybrid" onclick="showCat('hybrid')" >☁️ Storage for Hybrid Cloud</button>
+    <button class="cat-btn cat-btn-resil"  onclick="showCat('resil')"  >🛡️ Storage for Data Resilience</button>
+    <button class="cat-btn cat-btn-power"  onclick="show('power','power')">⚡ IBM Power</button>
+  </div>
+</div>
+
+<!-- NIVEL 2: Sub-navegación por categoría -->
+<div id="subnav-ai" class="subnav-bar">
+  <button class="seg-btn btn-flash"  onclick="show('flash','ai')"  >💾 FlashSystem</button>
+  <button class="seg-btn btn-swai"   onclick="show('swai','ai')"   >⚙️ Intelligence Control</button>
+  <button class="seg-btn btn-scale"  onclick="show('scale','ai')"  >📦 Storage Scale</button>
+</div>
+<div id="subnav-hybrid" class="subnav-bar">
+  <button class="seg-btn btn-fusion" onclick="show('fusion','hybrid')" >🔗 Fusion</button>
+</div>
+<div id="subnav-power" class="subnav-bar" style="display:none;"></div>
+<div id="subnav-resil" class="subnav-bar">
+  <button class="seg-btn btn-swresil" onclick="show('swresil','resil')">📼 IBM Library Software</button>
+  <button class="seg-btn btn-library"  onclick="show('library','resil')" >🗄️ Library</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECCIÓN: IBM POWER
+══════════════════════════════════════════════════════════════════════════════ -->
+<section id="sec-power" class="section">
+
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#0043CE22;">⚡</div>
+    <div>
+      <h2>IBM Power</h2>
+      <p>La plataforma de cómputo empresarial más avanzada del mundo — IBM Power11</p>
+    </div>
+  </div>
+
+  <!-- Intro -->
+  <div class="info-box">
+    <strong>¿Qué es IBM Power?</strong><br>
+    IBM Power es una familia de servidores empresariales basados en el procesador <strong>IBM Power11</strong>, diseñados para ofrecer el máximo rendimiento, seguridad y resiliencia en cargas de trabajo críticas. A diferencia de la arquitectura x86, IBM Power está optimizado para <strong>virtualización masiva</strong>, <strong>inteligencia artificial embebida</strong> y operación continua 24×7×365.
+  </div>
+
+  <!-- Casos de uso -->
+  <div class="divlabel">¿Para qué sirve?</div>
+  <div class="pills">
+    <div class="pill"><span class="pi">🖥️</span> <span><strong>Virtualización masiva</strong> — Miles de VMs o LPARs en un solo sistema</span></div>
+    <div class="pill"><span class="pi">🤖</span> <span><strong>Inteligencia Artificial</strong> — Inferencia y entrenamiento AI/ML on-premises</span></div>
+    <div class="pill"><span class="pi">📊</span> <span><strong>ERP y bases de datos</strong> — SAP, Oracle, Db2, PostgreSQL con alto IOPS</span></div>
+    <div class="pill"><span class="pi">🛡️</span> <span><strong>Misión crítica 24×7</strong> — RAS líder en la industria</span></div>
+    <div class="pill"><span class="pi">☁️</span> <span><strong>Multicloud híbrido</strong> — IBM Cloud, AWS y Azure vía PowerVC</span></div>
+    <div class="pill"><span class="pi">🐧</span> <span><strong>AIX, IBM i y Linux</strong> — Soporte nativo de los tres SO</span></div>
+  </div>
+
+  <!-- Tabla comparativa -->
+  <div class="divlabel">Comparativa de modelos Power11</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Detalles</th>
+          <th>Power S1112</th>
+          <th>Power S1122</th>
+          <th>Power E1150</th>
+          <th>Power E1180</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Segmento</td>         <td>Entry / Scale-out</td>      <td>Entry / Scale-out</td>      <td>Enterprise</td>              <td class="highlight">Enterprise Flagship</td></tr>
+        <tr><td>Factor de forma</td>  <td>2U rack</td>                <td>2U rack</td>                <td>4U rack</td>                 <td>4–8U rack</td></tr>
+        <tr><td>Sockets</td>          <td>1</td>                      <td>2</td>                      <td>2 – 4</td>                   <td class="highlight">4 – 16</td></tr>
+        <tr><td>Núcleos máx.</td>     <td>8 núcleos</td>              <td>16 núcleos</td>             <td>48 núcleos</td>              <td class="highlight">192 núcleos</td></tr>
+        <tr><td>SMT</td>              <td>SMT8</td>                   <td>SMT8</td>                   <td>SMT8</td>                    <td>SMT8</td></tr>
+        <tr><td>Memoria máx.</td>     <td>512 GB DDR4</td>            <td>1 TB DDR4</td>              <td>8 TB DDR4 + PMem</td>        <td class="highlight">64 TB DDR4 + PMem</td></tr>
+        <tr><td>Almacenamiento</td>   <td>NVMe / SAS</td>             <td>NVMe / SAS</td>             <td>NVMe / SAS</td>              <td>NVMe / SAS</td></tr>
+        <tr><td>Virtualización</td>   <td>PowerVM LPARs</td>          <td>PowerVM LPARs</td>          <td>PowerVM LPARs</td>           <td>PowerVM LPARs</td></tr>
+        <tr><td>SO soportados</td>    <td>AIX, IBM i, Linux</td>      <td>AIX, IBM i, Linux</td>      <td>AIX, IBM i, Linux</td>       <td>AIX, IBM i, Linux</td></tr>
+        <tr><td>Puertos PCIe</td>     <td>PCIe Gen4 × 4</td>         <td>PCIe Gen4 × 6</td>          <td>PCIe Gen5 × 8</td>           <td class="highlight">PCIe Gen5 × 16+</td></tr>
+        <tr><td>Puertos Ethernet</td> <td>Hasta 25 GbE</td>           <td>Hasta 25 GbE</td>           <td>Hasta 100 GbE</td>           <td class="highlight">Hasta 400 GbE</td></tr>
+        <tr><td>Alta disponib.</td>   <td>Standard RAS</td>           <td>Standard RAS</td>           <td>Mission-critical RAS</td>    <td>Mission-critical RAS</td></tr>
+        <tr><td>Caso de uso</td>      <td>Pymes, sucursales</td>      <td>Medianas empresas</td>      <td>Banca, IA on-prem</td>       <td>HPC, Gobierno, Telco</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.8rem;color:var(--mgray);text-align:right;">IBM Power11 · Especificaciones sujetas a configuración · 2026</p>
+
+  <div style="text-align:center;margin-top:1.5rem;">
+    <a href="https://www.ibm.com/products/power?lnk=L0G" target="_blank"
+       style="display:inline-block;padding:.75rem 2rem;background:#0043CE;color:#fff;font-weight:700;font-size:.95rem;border-radius:50px;text-decoration:none;letter-spacing:.02em;transition:background .15s;">
+      Conoce más →
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECCIÓN: IBM FLASHSYSTEM
+══════════════════════════════════════════════════════════════════════════════ -->
+<section id="sec-flash" class="section">
+
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#00627222;">💾</div>
+    <div>
+      <h2>IBM FlashSystem</h2>
+      <p>Almacenamiento NVMe all-flash redefinido — FlashCore Module 5 &amp; FlashSystem.ai</p>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>FlashSystem redefinido</strong><br>
+    IBM FlashSystem se ha optimizado para impulsar a las empresas con una capacidad sin precedentes, gracias a la nueva generación <strong>FlashCore Module 5 (FCM5)</strong>. La plataforma <strong>FlashSystem.ai</strong> incorpora tres pilares: <em>Adapt</em> (se adapta a la carga), <em>Perform</em> (rendimiento garantizado) y <em>Protect</em> (protección contra ransomware integrada).
+  </div>
+
+  <!-- FCM5 highlight -->
+  <div class="divlabel">IBM FlashCore Module 5</div>
+  <div class="two-col">
+    <div class="panel">
+      <h3>¿Qué es FCM5?</h3>
+      <ul>
+        <li>Módulo NVMe de nueva generación con <strong>compresión y cifrado por hardware</strong></li>
+        <li>Inteligencia embebida para detección de ransomware en tiempo real (ML on-chip)</li>
+        <li>Mayor densidad por slot vs. NVMe estándar</li>
+        <li>Reduce latencia y aumenta IOPS frente a generaciones anteriores</li>
+        <li>Compatible con FlashSystem 5600, 7600 y 9600</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>FlashSystem.ai — 3 pilares</h3>
+      <ul>
+        <li><strong>Adapt:</strong> Machine Learning + Estate Learning &amp; Observability</li>
+        <li><strong>Perform:</strong> Natural Language Processing + Agentic Control Plane</li>
+        <li><strong>Protect:</strong> Data Management + Neural Networks + Safe Guarded Copies</li>
+        <li>Data Contracts: lenguaje de intención de negocio garantizado</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Tabla NVMe -->
+  <div class="divlabel">Sistemas FlashSystem NVMe — Q1 2026</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Detalles</th>
+          <th>FlashSystem C300</th>
+          <th>FlashSystem 5600</th>
+          <th>FlashSystem 7600</th>
+          <th>FlashSystem 9600</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Tipo de media</td>           <td>NVMe</td>                   <td>NVMe</td>                <td>NVMe</td>                   <td>NVMe</td></tr>
+        <tr><td>Rack Units</td>              <td>2U</td>                     <td>1U</td>                  <td>2U</td>                     <td>2U</td></tr>
+        <tr><td>Drive slots</td>             <td>24 drive slots</td>         <td>12 drive slots</td>      <td>32 drive slots</td>         <td>32 drive slots</td></tr>
+        <tr><td>Usable / Raw</td>            <td>1.1 PBe / 1.6 PBe</td>      <td>400 TB / 633 TB</td>     <td>1.1 TB / 1.7 PBe</td>       <td class="highlight">2.1 PBe / 3 PBe</td></tr>
+        <tr><td>CPU info por sistema</td>    <td>4×10 core</td>              <td>2×12 core</td>           <td>2×16 core</td>              <td>2×48 core</td></tr>
+        <tr><td>CPU cores totales</td>       <td>40 cores</td>               <td>24 cores</td>            <td>32 cores</td>               <td class="highlight">96 cores</td></tr>
+        <tr><td>High-speed bus</td>          <td>PCIe Gen 4</td>             <td>PCIe Gen 4</td>          <td>PCIe Gen 5</td>             <td>PCIe Gen 5</td></tr>
+        <tr><td>Max Cache Hit IOPS</td>      <td>1.5 M</td>                  <td>2.6 M</td>               <td>4.33 M</td>                 <td class="highlight">6.3 M</td></tr>
+        <tr><td>Max 70/30/50 IOPs 16KB</td>  <td>—</td>                      <td>0.7 M</td>               <td>1.2 M</td>                  <td class="highlight">3.00 M</td></tr>
+        <tr><td>Max Read Miss BW</td>        <td>23 GB/s</td>                <td>30 GB/s</td>             <td>55 GB/s</td>                <td class="highlight">86 GB/s</td></tr>
+        <tr><td>Max BW por drive</td>        <td>0.95 GB/s</td>              <td>1.83 GB/s</td>           <td>1.87 GB/s</td>              <td>2.68 GB/s</td></tr>
+        <tr><td>Max HBA slot/sistema</td>    <td>4</td>                      <td>4</td>                   <td>8</td>                      <td>8</td></tr>
+        <tr><td>Max FC ports</td>            <td>16–32 Gb FC ports</td>      <td>16–32 Gb / 8–64 Gb</td>  <td>32–32 Gb / 24–64 Gb</td>   <td>32–32 Gb / 24–64 Gb</td></tr>
+        <tr><td>Max Ethernet ports</td>      <td>8–10 GbE / 8–25 GbE</td>   <td>4–25 GbE / 16–25 GbE</td><td>32–25 GbE</td>             <td>32–25 GbE</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align:center;margin-top:1.5rem;">
+    <a href="https://www.ibm.com/products/flashsystem?lnk=L0G" target="_blank"
+       style="display:inline-block;padding:.75rem 2rem;background:#0043CE;color:#fff;font-weight:700;font-size:.95rem;border-radius:50px;text-decoration:none;letter-spacing:.02em;transition:background .15s;">
+      Conoce más →
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECCIÓN: IBM STORAGE SCALE
+══════════════════════════════════════════════════════════════════════════════ -->
+<section id="sec-scale" class="section">
+
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#5B21B622;">📦</div>
+    <div>
+      <h2>IBM Storage Scale</h2>
+      <p>Sistema de archivos paralelo distribuido GPFS — desde HPC hasta AI a escala de exabytes</p>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>¿Qué es IBM Storage Scale?</strong><br>
+    IBM Storage Scale es un sistema de archivos paralelo distribuido (<strong>GPFS — General Parallel File System</strong>) de alto rendimiento. Permite que miles de nodos accedan simultáneamente a los mismos datos con consistencia garantizada, tiering automático y soporte multi-protocolo (POSIX, NFS, SMB, HDFS, S3).
+  </div>
+
+  <!-- Casos de uso -->
+  <div class="divlabel">¿Para qué sirve?</div>
+  <div class="pills">
+    <div class="pill"><span class="pi">🔬</span><span><strong>HPC &amp; Simulación Científica</strong> — CFD, síntesis proteínas, modelado geosísmico</span></div>
+    <div class="pill"><span class="pi">🤖</span><span><strong>AI / ML / Deep Learning</strong> — Datasets de entrenamiento para GPUs con lecturas secuenciales a alta velocidad</span></div>
+    <div class="pill"><span class="pi">📊</span><span><strong>Big Data &amp; Analytics</strong> — Backend Hadoop, Spark, pipelines con soporte HDFS nativo</span></div>
+    <div class="pill"><span class="pi">🏭</span><span><strong>Manufactura &amp; EDA</strong> — Diseño electrónico y simulaciones de ingeniería con acceso simultáneo</span></div>
+    <div class="pill"><span class="pi">🏥</span><span><strong>Ciencias de la Vida</strong> — Secuenciación ADN, imágenes DICOM, bioinformática a escala PB</span></div>
+    <div class="pill"><span class="pi">☁️</span><span><strong>Almacenamiento Híbrido</strong> — Tiering automático hacia IBM COS, S3 y soporte multi-nube</span></div>
+  </div>
+
+  <!-- Tabla Scale -->
+  <div class="divlabel">Especificaciones técnicas por modelo</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Detalle</th>
+          <th>Scale System 3500</th>
+          <th>Scale System 6000</th>
+          <th>ESS 3500</th>
+          <th>ESS Management Server</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>MTM / Modelo</td>          <td>5141-FN2</td>                      <td>5147-106 (ESS 5000)</td>           <td>5147-102</td>                    <td>x86 / cualquier HW</td></tr>
+        <tr><td>Tipo de Media</td>          <td>NVMe SSD (PCIe Gen4)</td>          <td>All-NVMe (PCIe Gen5)</td>          <td>NVMe + HDD (híbrido)</td>         <td>HDD / SSD / NVMe</td></tr>
+        <tr><td>CPU por Canister</td>       <td>AMD EPYC 7642 (48c)</td>           <td class="highlight">IBM Power11 (2S)</td><td>IBM Power11</td>             <td>x86 / Intel Xeon</td></tr>
+        <tr><td>RAM por Canister</td>       <td>512 GB o 1 TB</td>                 <td class="highlight">2 TB (expandible)</td><td>512 GB – 1 TB</td>          <td>Según servidor host</td></tr>
+        <tr><td>Slots de Drives</td>        <td>12 o 24 NVMe (2.5")</td>           <td>24 NVMe (2.5") por encl.</td>      <td>24 NVMe + exp. HDD</td>          <td>Flexible</td></tr>
+        <tr><td>Capacidad Máxima</td>       <td>Hasta 720 TB raw</td>              <td class="highlight">Hasta 6+ PB raw</td><td>Hasta varios PBs</td>         <td>Escala a exabytes</td></tr>
+        <tr><td>Red Alta Velocidad</td>     <td>IB HDR 200 Gb / 100 GbE</td>      <td class="highlight">IB NDR 400 Gb / 200 GbE</td><td>IB HDR 200 Gb / 100 GbE</td><td>IB / 100 GbE / RoCE</td></tr>
+        <tr><td>PCIe Slots/Canister</td>    <td>4× PCIe Gen4 x16</td>             <td>PCIe Gen5 alta densidad</td>       <td>PCIe Gen4/Gen5</td>               <td>Según HBA instalado</td></tr>
+        <tr><td>RAID soportado</td>         <td>8+2P, 8+3P, 3/4-way Rep.</td>     <td>8+2P, 8+3P, Replication</td>      <td>8+2P, 8+3P, Replication</td>     <td>Según config. GPFS</td></tr>
+        <tr><td>Rack Units</td>             <td>2U por enclosure</td>              <td>2U por enclosure</td>              <td>2U por enclosure</td>             <td>Flexible</td></tr>
+        <tr><td>Alimentación</td>           <td>2× 2000 W, 200–240 V AC</td>      <td>2× PSU redundantes</td>           <td>2× PSU redundantes</td>           <td>Según servidor host</td></tr>
+        <tr><td>Caso de Uso Principal</td>  <td>HPC NVMe / AI moderado</td>       <td class="highlight">AI/ML / Deep Learning / HPC</td><td>HPC Capacity / Analytics</td><td>Consolidación / Archivos</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align:center;margin-top:1.5rem;">
+    <a href="https://www.ibm.com/products/storage-scale-system?lnk=L0G" target="_blank"
+       style="display:inline-block;padding:.75rem 2rem;background:#0043CE;color:#fff;font-weight:700;font-size:.95rem;border-radius:50px;text-decoration:none;letter-spacing:.02em;transition:background .15s;">
+      Conoce más →
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECCIÓN: SOFTWARE — Storage for Data & AI (Intelligence Control)
+══════════════════════════════════════════════════════════════════════════════ -->
+<section id="sec-swai" class="section">
+
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#0043CE22;">⚙️</div>
+    <div>
+      <h2>IBM Storage Intelligence Control</h2>
+      <p>Software de gestión centralizada para sistemas FlashSystem all-flash NVMe</p>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(90deg,#0043CE18,transparent);border-left:5px solid var(--ibmblue);border-radius:10px;padding:1rem 1.4rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;">
+    <span style="font-size:2rem;">💾</span>
+    <div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--navy);">IBM Storage Software</div>
+      <div style="font-size:.9rem;color:var(--mgray);">Para sistemas FlashSystem all-flash NVMe — datos activos calientes y tibios</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>IBM Storage Intelligence Control</strong><br>
+    Es el software de gestión centralizada incluido en los sistemas IBM FlashSystem. Actúa como licencia "unificadora" que activa todos los módulos avanzados del sistema. Incluye 5 años de SWMA.<br><br>
+    <strong>Licenciamiento:</strong> Por dispositivo (per storage device)
+  </div>
+
+  <div class="divlabel">Capacidades incluidas</div>
+  <div class="pills">
+    <div class="pill"><span class="pi">📊</span><span><strong>Gestión unificada</strong> — Administración de múltiples FlashSystem desde una sola consola web</span></div>
+    <div class="pill"><span class="pi">🔁</span><span><strong>Replicación incluida</strong> — Metro Mirror, Global Mirror y HyperSwap sin licencias adicionales</span></div>
+    <div class="pill"><span class="pi">🛡️</span><span><strong>Snapshots &amp; Clones</strong> — FlashCopy y Safe Guarded Copies (inmutables) para protección de datos</span></div>
+  </div>
+
+  <div class="divlabel">Módulos incluidos en Storage Intelligence Control</div>
+  <div class="mod-grid">
+    <div class="mod-card">
+      <h4>IBM Storage Virtualize</h4>
+      <ul>
+        <li>Thin Provisioning y over-provisioning</li>
+        <li>Compresión y deduplicación en línea</li>
+        <li>Virtualización de storage externo (cualquier fabricante)</li>
+        <li>Clustering activo-activo (Stretched Cluster)</li>
+      </ul>
+    </div>
+    <div class="mod-card">
+      <h4>Copy Services Manager (CSM)</h4>
+      <ul>
+        <li>Orquestación de copias de seguridad</li>
+        <li>Flujos automatizados de replicación local y remota</li>
+        <li>Snapshots programados y bajo demanda</li>
+        <li>Safe Guarded Copies (inmutables)</li>
+      </ul>
+    </div>
+    <div class="mod-card">
+      <h4>Storage Insights Pro</h4>
+      <ul>
+        <li>Análisis predictivo con IA/ML</li>
+        <li>Monitoreo de rendimiento: IOPS, latencia, throughput</li>
+        <li>Análisis de causa raíz incluyendo red SAN e hipervisores</li>
+        <li>Call-home automático y alertas predictivas</li>
+      </ul>
+    </div>
+    <div class="mod-card">
+      <h4>IBM Spectrum Virtualize — Replicación</h4>
+      <ul>
+        <li>Metro Mirror: replicación síncrona (RPO=0)</li>
+        <li>Global Mirror: replicación asíncrona (RPO configurable)</li>
+        <li>HyperSwap: activo-activo con failover transparente</li>
+        <li>Soporte multi-site y multi-tenant</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divlabel">Cómo funciona el software — FlashSystem x600</div>
+  <div class="two-col">
+    <div class="panel">
+      <h3>IBM FlashSystem 7600 (5075-A30) — Site Principal</h3>
+      <ul>
+        <li><strong>IBM Spectrum Virtualize</strong> — Gestión de pools, thin provisioning, compresión, virtualización externa</li>
+        <li><strong>Copy Services Manager</strong> — Políticas de replicación, Safe Guarded Copies, flujos automatizados</li>
+        <li><strong>Storage Insights Pro</strong> — Dashboards, análisis SAN + hipervisor, alertas predictivas, call-home</li>
+        <li><strong>Storage Intelligence Control</strong> — Licencia unificadora, activa todos los módulos, 5 años SWMA</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>IBM FlashSystem 5600 (5127-A20) — Site DR</h3>
+      <ul>
+        <li>Replicación <strong>Asíncrona (Global Mirror)</strong> desde Site Principal</li>
+        <li>Software activo en ambos sistemas de forma independiente</li>
+        <li>Failover orquestado por CSM en caso de desastre</li>
+        <li>RPO configurable según política de negocio</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECCIÓN: SOFTWARE — Storage for Data Resilience (Library Software)
+══════════════════════════════════════════════════════════════════════════════ -->
+<section id="sec-swresil" class="section">
+
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#7c3aed22;">📼</div>
+    <div>
+      <h2>IBM Library Software</h2>
+      <p>Software de gestión para librerías de cinta LTO-9 — datos fríos, archivo y cumplimiento regulatorio</p>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(90deg,#7A470018,transparent);border-left:5px solid #7A4700;border-radius:10px;padding:1rem 1.4rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;">
+    <span style="font-size:2rem;">📼</span>
+    <div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--navy);">IBM Library Software</div>
+      <div style="font-size:.9rem;color:var(--mgray);">Para librerías de cinta LTO-9 — datos fríos de archivo y cumplimiento regulatorio</div>
+    </div>
+  </div>
+
+  <div class="info-box" style="border-left-color:#7A4700;">
+    <strong>IBM Storage Archive — el software central de gestión de cinta</strong><br>
+    <strong>IBM Storage Archive</strong> activa la gestión completa de las librerías de cinta: ciclo de vida automático, tiering disco→cinta, cumplimiento regulatorio y catálogo unificado de cartuchos.
+  </div>
+
+  <div class="divlabel">Módulos IBM Storage Archive</div>
+  <div class="mod-grid">
+    <div class="mod-card" style="border-top-color:#7A4700;">
+      <h4>📼 IBM Storage Archive Enterprise Ed.</h4>
+      <ul>
+        <li><strong>Target:</strong> TS4500 y entornos enterprise — petabytes a exabytes</li>
+        <li>Gestión centralizada de múltiples librerías desde una sola consola</li>
+        <li>Tiering automático disco→cinta según políticas de negocio</li>
+        <li>Archivo a largo plazo con retención configurable (años/décadas)</li>
+        <li>Cumplimiento WORM: SEC, FINRA, HIPAA, GDPR automatizado</li>
+        <li>Catálogo completo: trazabilidad de qué dato está en qué cartucho</li>
+        <li>Auditoría y reportes para entornos regulados</li>
+      </ul>
+    </div>
+    <div class="mod-card" style="border-top-color:#7A4700;">
+      <h4>📼 IBM Storage Archive Library Ed.</h4>
+      <ul>
+        <li><strong>Target:</strong> TS4300 y medianas empresas</li>
+        <li>Mismas funciones que Enterprise Edition a menor escala</li>
+        <li>Gestión del ciclo de vida y archivo automatizado</li>
+        <li>Integración con software de backup (Veeam, Commvault, TSM)</li>
+        <li>Control de retención y políticas WORM básicas</li>
+        <li>Catálogo de cartuchos y reportes de uso</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divlabel">¿Cuándo es necesario IBM Storage Archive?</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Escenario</th>
+          <th>¿Necesita Storage Archive?</th>
+          <th>Producto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Backup con Veeam / Commvault</td>              <td>No — el software de backup gestiona la librería directamente</td>           <td>—</td></tr>
+        <tr><td>IBM Spectrum Protect (TSM)</td>                <td>No — TSM incluye control nativo de cinta</td>                                <td>—</td></tr>
+        <tr><td>Archivo a largo plazo con tiering automático</td><td class="highlight">Sí — gestiona el ciclo de vida autónomamente</td>        <td class="highlight"></td></tr>
+        <tr><td>Cumplimiento regulatorio automatizado</td>     <td class="highlight">Sí — aplica políticas WORM y auditoría sin intervención</td><td class="highlight"></td></tr>
+        <tr><td>TS4500 enterprise a escala exabytes</td>       <td class="highlight">Sí — gestión centralizada imprescindible</td>              <td class="highlight"></td></tr>
+        <tr><td>TS4300 mediana empresa</td>                    <td>Recomendado para automatizar el ciclo de vida</td>                           <td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECCIÓN: LIBRARY — Tape Drives & Libraries Portfolio
+══════════════════════════════════════════════════════════════════════════════ -->
+<section id="sec-library" class="section">
+
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#00547222;">🗄️</div>
+    <div>
+      <h2>IBM Library — Tape Portfolio</h2>
+      <p>Drives standalone y librerías LTO-9 · TS2290 · TS2900 · TS4300 · TS4500 · Diamondback</p>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>¿Por qué IBM Tape Library?</strong><br>
+    La familia de librerías y drives de cinta IBM cubre desde backups económicos para PYME hasta repositorios de exabytes con IA integrada. Todos los modelos comparten cifrado <strong>AES-256 por hardware</strong>, soporte <strong>LTO-9 nativo</strong> (18 TB/cart. nativos, 45 TB comprimidos) y air-gap físico para protección inmune al ransomware remoto. IBM es el único fabricante que integra drives, librerías y software de gestión de extremo a extremo.
+  </div>
+
+  <div class="divlabel">Ventajas del portafolio de cinta IBM</div>
+  <div class="pills">
+    <div class="pill"><span class="pi">🔒</span><span><strong>Air-gap físico</strong> — Cartuchos desconectados son invulnerables al ransomware remoto</span></div>
+    <div class="pill"><span class="pi">💰</span><span><strong>TCO 5× menor</strong> — Vs. object storage en nube para retención &gt;3 años, sin costos egress</span></div>
+    <div class="pill"><span class="pi">⚡</span><span><strong>0 W inactivo</strong> — Cero consumo energético cuando el cartucho no está en uso</span></div>
+    <div class="pill"><span class="pi">🔑</span><span><strong>AES-256 hardware</strong> — Cifrado por cartucho sin impacto en velocidad</span></div>
+    <div class="pill"><span class="pi">📜</span><span><strong>WORM &amp; cumplimiento</strong> — SEC, FINRA, HIPAA, GDPR certificados (TS4500)</span></div>
+    <div class="pill"><span class="pi">🤖</span><span><strong>IA integrada</strong> — Gestión predictiva del ciclo de vida (Diamondback)</span></div>
+  </div>
+
+  <!-- Tabla comparativa — AL INICIO -->
+  <div class="divlabel">Comparativa — TS2290 · TS2900 · TS4300 · TS4500 · Diamondback</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th>TS2290</th>
+          <th>TS2900</th>
+          <th>TS4300</th>
+          <th>TS4500</th>
+          <th>Diamondback</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Tipo</td>               <td>Drive standalone</td>     <td>Librería 1U</td>        <td>Librería Mid-Range</td>  <td>Librería Enterprise</td>       <td class="highlight">Librería Next-Gen AI</td></tr>
+        <tr><td>Factor de forma</td>    <td>3U Full-Height</td>       <td>1U rack</td>            <td>2U modular</td>          <td>10U+ multi-frame</td>          <td>Alta densidad</td></tr>
+        <tr><td>Drives máximos</td>     <td>1 (standalone)</td>       <td>1 drive LTO-9</td>      <td>6 drives LTO-9</td>      <td class="highlight">512 drives</td><td>Alta densidad</td></tr>
+        <tr><td>Slots cartuchos</td>    <td>Manual (1 a la vez)</td>  <td>15 slots</td>           <td>60–360+ slots</td>       <td class="highlight">18,000+</td>  <td>Alta densidad</td></tr>
+        <tr><td>Capacidad máxima</td>   <td>18 TB/cart.</td>          <td>270 TB nativos</td>     <td>2.3 PB nativos</td>      <td class="highlight">2.8 EB nativos</td><td class="highlight">Exabytes (50 TB/cart.)</td></tr>
+        <tr><td>Velocidad</td>          <td>400 MB/s</td>             <td>400 MB/s</td>           <td>400 MB/s</td>            <td>400 MB/s</td>                  <td class="highlight">&gt;500 MB/s</td></tr>
+        <tr><td>Interfaces</td>         <td>SAS 6Gb / USB 3.0</td>   <td>SAS 6Gb / FC 8Gb</td>  <td>SAS / FC 8Gb</td>        <td>FC 8/16 Gb</td>                <td class="highlight">FC 32Gb / 25 GbE</td></tr>
+        <tr><td>Automatización</td>     <td>No (manual)</td>          <td>Básica (robot 1U)</td>  <td>Sí (modular)</td>        <td>Sí (enterprise)</td>           <td>Sí + IA autónoma</td></tr>
+        <tr><td>WORM</td>               <td>LTO WORM</td>             <td>LTO WORM</td>           <td>LTO WORM</td>            <td class="highlight">Físico + virtual cert.</td><td>Next-gen</td></tr>
+        <tr><td>Certificaciones</td>    <td>—</td>                    <td>—</td>                  <td>—</td>                   <td class="highlight">SEC · FINRA · HIPAA · GDPR</td><td>—</td></tr>
+        <tr><td>IA integrada</td>       <td>—</td>                    <td>—</td>                  <td>—</td>                   <td>—</td>                         <td class="highlight">✔ Ciclo de vida AI</td></tr>
+        <tr><td>Air-gap</td>            <td>Físico (manual)</td>      <td>Físico</td>             <td>Físico</td>              <td>Físico</td>                    <td>Físico</td></tr>
+        <tr><td>Cifrado</td>            <td>AES-256</td>              <td>AES-256</td>            <td>AES-256</td>             <td>AES-256</td>                   <td>AES-256</td></tr>
+        <tr><td>Target</td>             <td>Data center intensivo</td><td>PYME / sucursal</td>   <td>Mediana empresa</td>     <td>Enterprise regulado</td>       <td class="highlight">AI / Hiperescala</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TS2290 -->
+  <div class="divlabel">IBM TS2290 — Drive standalone LTO-9 Full-Height</div>
+  <div class="two-col">
+    <div class="panel">
+      <h3>Especificaciones técnicas</h3>
+      <ul>
+        <li><strong>Generación:</strong> LTO-9 Full-Height</li>
+        <li><strong>Capacidad nativa:</strong> 18 TB / cartucho</li>
+        <li><strong>Capacidad comprimida:</strong> 45 TB / cartucho (2.5:1)</li>
+        <li><strong>Velocidad:</strong> 400 MB/s nativo</li>
+        <li><strong>Interfaces:</strong> SAS 6 Gb / USB 3.0 Micro-B</li>
+        <li><strong>Compatibilidad:</strong> LTO-9 R/W · LTO-8 R/W · LTO-7 solo lectura</li>
+        <li><strong>Cifrado:</strong> AES-256 por hardware</li>
+        <li><strong>WORM:</strong> LTO WORM nativo</li>
+        <li><strong>Factor de forma:</strong> 3U Full-Height rack o sobremesa</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Casos de uso y diferenciadores</h3>
+      <ul>
+        <li><strong>Target:</strong> Data centers con uso diario intensivo y archivo frecuente</li>
+        <li>Mayor durabilidad vs. TS2280 Half-Height para ciclos de carga intensiva</li>
+        <li>Air-gap manual: ideal para políticas de backup offsite sin automatización</li>
+        <li>Integración con IBM Spectrum Protect (Tivoli Storage Manager)</li>
+        <li>Bajo CAPEX inicial para organizaciones que escalan hacia TS4300</li>
+        <li><strong>Ventaja vs. TS2280:</strong> Full-Height = mayor MTBF en entornos 24×7</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TS2900 -->
+  <div class="divlabel">IBM TS2900 — Librería 1U Entry</div>
+  <div class="two-col">
+    <div class="panel">
+      <h3>Especificaciones técnicas</h3>
+      <ul>
+        <li><strong>Factor de forma:</strong> 1U rack</li>
+        <li><strong>Slots de cartuchos:</strong> 15 slots</li>
+        <li><strong>Drives:</strong> 1 drive LTO-9</li>
+        <li><strong>Capacidad máxima:</strong> 270 TB nativos / 675 TB comprimidos</li>
+        <li><strong>Velocidad:</strong> 400 MB/s nativo</li>
+        <li><strong>Interfaces:</strong> SAS 6 Gb / FC 8 Gb</li>
+        <li><strong>Cifrado:</strong> AES-256 por hardware</li>
+        <li><strong>WORM:</strong> LTO WORM nativo</li>
+        <li><strong>Air-gap:</strong> Físico (cartucho offline)</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Casos de uso y diferenciadores</h3>
+      <ul>
+        <li><strong>Target:</strong> PYME, sucursales, oficinas remotas</li>
+        <li>Automatización de 15 cartuchos sin intervención manual constante</li>
+        <li>Ocupa solo 1U en rack — mínima huella física</li>
+        <li>Sin requerimiento de IT especializado para operación diaria</li>
+        <li>Ideal como primer nivel automatizado antes de escalar a TS4300</li>
+        <li>Compatible con software de backup estándar (Veeam, Commvault, TSM)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TS4300 -->
+  <div class="divlabel">IBM TS4300 — Librería Mid-Range Modular</div>
+  <div class="two-col">
+    <div class="panel">
+      <h3>Especificaciones técnicas</h3>
+      <ul>
+        <li><strong>Factor de forma:</strong> 2U por módulo (hasta 6 módulos)</li>
+        <li><strong>Slots base:</strong> 60 cartuchos (expandible)</li>
+        <li><strong>Slots máximos:</strong> Hasta 360+ cartuchos con expansión</li>
+        <li><strong>Drives máximos:</strong> 6 drives LTO-9</li>
+        <li><strong>Capacidad máxima:</strong> 2.3 PB nativos / 5.8 PB comprimidos</li>
+        <li><strong>Velocidad:</strong> 400 MB/s por drive</li>
+        <li><strong>Interfaces:</strong> SAS / FC 8 Gb</li>
+        <li><strong>Cifrado:</strong> AES-256 por hardware</li>
+        <li><strong>WORM:</strong> LTO WORM nativo</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Casos de uso y diferenciadores</h3>
+      <ul>
+        <li><strong>Target:</strong> Mediana empresa con crecimiento en datos</li>
+        <li>Expansión modular sin downtime — agrega módulos en caliente</li>
+        <li>Automatización completa del ciclo backup-archivo-recovery</li>
+        <li>Integración con IBM Spectrum Protect, Veeam, Commvault</li>
+        <li>Gestión remota via IBM Tape Library Manager (TLM)</li>
+        <li><strong>Ventaja key:</strong> Arquitectura scale-out sin reemplazar el sistema base</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TS4500 -->
+  <div class="divlabel">IBM TS4500 — Librería Enterprise</div>
+  <div class="two-col">
+    <div class="panel">
+      <h3>Especificaciones técnicas</h3>
+      <ul>
+        <li><strong>Factor de forma:</strong> Frame de 10U (múltiples frames escalables)</li>
+        <li><strong>Slots máximos:</strong> 18,000+ cartuchos</li>
+        <li><strong>Drives máximos:</strong> 512 drives LTO-9</li>
+        <li><strong>Capacidad máxima:</strong> 2.8 EB nativos / 7 EB comprimidos</li>
+        <li><strong>Velocidad:</strong> 400 MB/s por drive</li>
+        <li><strong>Interfaces:</strong> FC 8/16 Gb</li>
+        <li><strong>Cifrado:</strong> AES-256 por hardware por cartucho</li>
+        <li><strong>WORM:</strong> Físico + virtual certificado (SEC, FINRA, HIPAA, GDPR)</li>
+        <li><strong>Air-gap:</strong> Físico garantizado</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Casos de uso y diferenciadores</h3>
+      <ul>
+        <li><strong>Target:</strong> Enterprise regulado — Banca, Gobierno, Salud, Telco</li>
+        <li>Único modelo certificado para SEC, FINRA, HIPAA y GDPR simultáneamente</li>
+        <li>WORM físico + virtual: inmutabilidad garantizada de archivo a largo plazo</li>
+        <li>TCO hasta 5× menor vs. object storage en nube para retención &gt;3 años</li>
+        <li>Escalabilidad desde PB hasta EB sin cambio de arquitectura</li>
+        <li><strong>Caso flagship:</strong> Repositorio offline masivo para DR enterprise</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Diamondback -->
+  <div class="divlabel">IBM Diamondback — Librería Next-Gen AI</div>
+  <div class="two-col">
+    <div class="panel">
+      <h3>Especificaciones técnicas</h3>
+      <ul>
+        <li><strong>Generación de cartucho:</strong> Próxima gen (hasta 50 TB nativo)</li>
+        <li><strong>Capacidad:</strong> Escala a exabytes con alta densidad</li>
+        <li><strong>Velocidad:</strong> &gt;500 MB/s por drive</li>
+        <li><strong>Interfaces:</strong> FC 32 Gb / 25 GbE</li>
+        <li><strong>Cifrado:</strong> AES-256 por hardware next-gen</li>
+        <li><strong>WORM:</strong> Next-gen (mayor capacidad de retención)</li>
+        <li><strong>Air-gap:</strong> Físico garantizado</li>
+        <li><strong>IA integrada:</strong> Ciclo de vida predictivo con ML on-device</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Casos de uso y diferenciadores</h3>
+      <ul>
+        <li><strong>Target:</strong> AI/ML hiperescala, grandes datasets de entrenamiento</li>
+        <li>50 TB/cartucho — mayor densidad de la industria (3× vs. LTO-9)</li>
+        <li>IA integrada gestiona automáticamente el ciclo de vida de datos</li>
+        <li>FC 32 Gb + 25 GbE: máxima conectividad para flujos AI masivos</li>
+        <li>Diseñada para escalar a decenas de EB en infraestructura única</li>
+        <li><strong>Diferenciador único:</strong> Primera librería con ML nativo para tiering autónomo</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Guía de selección -->
+  <div class="divlabel">Guía rápida de selección por caso de uso</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Caso de Uso</th>
+          <th>Producto Recomendado</th>
+          <th>Beneficio clave</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Backup standalone diario intensivo</td>       <td>TS2290</td>                         <td>Full-Height LTO-9, máxima durabilidad, 18 TB/cart.</td></tr>
+        <tr><td>Backup automatizado PYME / sucursal</td>      <td>TS2900</td>                         <td>1U, 15 slots, 270 TB, sin IT especializado</td></tr>
+        <tr><td>Backup offsite empresa mediana</td>           <td>TS4300</td>                         <td>2.3 PB modular, expansión sin downtime, WORM nativo</td></tr>
+        <tr><td>Archivo regulatorio largo plazo</td>          <td class="highlight">TS4500</td>       <td class="highlight">2.8 EB, WORM físico certificado, TCO 5× mejor</td></tr>
+        <tr><td>AI/ML datasets de entrenamiento masivos</td>  <td class="highlight">Diamondback</td>  <td class="highlight">50 TB/cart., exabytes, IA ciclo de vida autónomo</td></tr>
+        <tr><td>DR enterprise multi-tier</td>                 <td>TS4300 + TS4500</td>                <td>Mid-range ágil + repositorio EB offline inmutable</td></tr>
+        <tr><td>Inicio en tape con opción de escalar</td>     <td>TS2290 → TS2900 → TS4300</td>       <td>Ruta de crecimiento sin cambio de arquitectura</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="font-size:.8rem;color:var(--mgray);text-align:right;">IBM Tape Library Portfolio · LTO-9 producción · Diamondback next-gen · 2026</p>
+
+  <div style="text-align:center;margin-top:1.5rem;">
+    <a href="https://www.ibm.com/products/tape?lnk=L0G" target="_blank"
+       style="display:inline-block;padding:.75rem 2rem;background:#0043CE;color:#fff;font-weight:700;font-size:.95rem;border-radius:50px;text-decoration:none;letter-spacing:.02em;transition:background .15s;">
+      Conoce más →
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECCIÓN: IBM FUSION — HCI · Fusion · Storage Fusion
+═══════════════════════════════════════════════════════════════════════════ -->
+<section id="sec-fusion" class="section">
+
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#7c3aed22;">🔗</div>
+    <div>
+      <h2>IBM Fusion</h2>
+      <p>Plataforma hiperconvergente container-native — Fusion HCI · IBM Fusion · IBM Storage Fusion</p>
+    </div>
+  </div>
+
+  <!-- Tabs internos de tercer nivel -->
+  <div style="display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.8rem;border-bottom:2px solid var(--border);padding-bottom:1rem;">
+    <button class="ftab-btn ftab-active" onclick="showFusionTab('fusion-hci',this)">🖥️ Fusion HCI</button>
+    <button class="ftab-btn" onclick="showFusionTab('fusion-sf',this)">🔗 IBM Fusion</button>
+    <button class="ftab-btn" onclick="showFusionTab('fusion-storage',this)">📦 Storage Fusion</button>
+  </div>
+
+  <!-- ── TAB 1: Fusion HCI ── -->
+  <div id="fusion-hci" class="ftab-panel">
+    <div class="info-box">
+      <strong>¿Qué es IBM Fusion HCI?</strong><br>
+      Plataforma hiperconvergente (<strong>HCI</strong>) container-native lista para producción. Integra hardware, OpenShift y watsonx en un solo stack pre-configurado de fábrica para on-premises, edge y nube privada. <em>One Platform. Zero Compromises.</em>
+    </div>
+    <div class="divlabel">¿Para qué sirve?</div>
+    <div class="pills">
+      <div class="pill"><span class="pi">📦</span><span><strong>OpenShift on-premises</strong> — Kubernetes + storage integrado, production-ready</span></div>
+      <div class="pill"><span class="pi">🤖</span><span><strong>AI / watsonx-in-a-box</strong> — watsonx.ai, watsonx.data y watsonx.governance en un solo stack local</span></div>
+      <div class="pill"><span class="pi">☁️</span><span><strong>Hybrid Cloud</strong> — Acceso transparente a S3, NFS, IBM Storage Scale sin mover datos</span></div>
+      <div class="pill"><span class="pi">🛡️</span><span><strong>Backup &amp; Recovery</strong> — IBM Storage Protect Plus para OpenShift y VMware</span></div>
+      <div class="pill"><span class="pi">📡</span><span><strong>Edge Computing</strong> — IA y datos distribuidos en el borde</span></div>
+      <div class="pill"><span class="pi">💰</span><span><strong>Reducción de costos</strong> — 90% menos subscripción OpenShift · 100% eliminación de licencias hipervisor</span></div>
+    </div>
+    <div class="divlabel">Beneficios clave vs arquitectura tradicional</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Beneficio</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Reducción costo OpenShift</td>     <td class="highlight">Hasta 90% menos en subscripción</td></tr>
+          <tr><td>Eficiencia infraestructura</td>     <td>20% más eficiente con bare-metal OpenShift vs hipervisores</td></tr>
+          <tr><td>Eliminación de hipervisor</td>      <td class="highlight">100% de licencias de hipervisor eliminadas</td></tr>
+          <tr><td>Aceleración queries S3</td>         <td class="highlight">Hasta 90× más rápido con watsonx.data + Fusion HCI</td></tr>
+          <tr><td>Pre-integrado production-ready</td> <td>Configurado en fábrica — operativo desde el día 1</td></tr>
+          <tr><td>Redundancia total</td>              <td>Sin single point of failure — firmware updates sin downtime</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="divlabel">Arquitectura de hardware</div>
+    <div class="info-box">
+      <strong>Configuración base del rack:</strong> 42U rack · 2× ToR switches 200 GbE · 2× management switches 1 Gb · 3–16× nodos S&amp;C · 1× Service Node<br>
+      <strong>Tolerancia:</strong> Pérdida de hasta 2 nodos S&amp;C sin pérdida de datos.
+    </div>
+    <div class="mod-grid">
+      <div class="mod-card" style="border-top-color:#7c3aed;">
+        <h4>⚙️ Storage &amp; Compute (S&amp;C)</h4>
+        <ul>
+          <li>Base del cluster — Data Foundation (mín. 3, máx. 16 nodos)</li>
+          <li>CPU: Intel Xeon Gold 6438N (32c) o 6426Y (16c)</li>
+          <li>Memoria: 256 GB → 2 048 GB según config.</li>
+          <li>Hasta 10× drives NVMe PCIe Gen5 de 7.68 TB</li>
+          <li>Red: ConnectX-6 DX dual 100 GbE + ConnectX-6 LX dual 25 GbE</li>
+        </ul>
+      </div>
+      <div class="mod-card" style="border-top-color:#7c3aed;">
+        <h4>🤖 GPU Server</h4>
+        <ul>
+          <li>CPU: 2× AMD EPYC 9254 (24c) · Memoria: 768 GB – 2 304 GB</li>
+          <li>GPUs: NVIDIA H100 NVL, H200 NVL, L40S o AMD MI210</li>
+          <li>Hasta 8× GPUs por nodo (config. Dell H200)</li>
+          <li>Red: 4× ConnectX-6 DX dual 100 GbE (Dell)</li>
+        </ul>
+      </div>
+      <div class="mod-card" style="border-top-color:#7c3aed;">
+        <h4>🔧 Service Node</h4>
+        <ul>
+          <li>CPU: Intel Xeon Bronze 3408U (8c, 1.8 GHz)</li>
+          <li>Memoria: 128 GB RAM · OS Storage: 2× 960 GB M.2 NVMe RAID 1</li>
+          <li>Red: ConnectX-6 LX dual 25 GbE</li>
+        </ul>
+      </div>
+      <div class="mod-card" style="border-top-color:#7c3aed;">
+        <h4>🌐 Switches de Red</h4>
+        <ul>
+          <li><strong>High-Speed:</strong> 2× NVIDIA/Mellanox SN3700V · 32× QSFP56 200 GbE · 6.4 Tb/s</li>
+          <li><strong>Management:</strong> 2× NVIDIA SN2201 · 48× 1 GbE RJ-45</li>
+          <li>Configuración MLAG redundante · OS: Cumulus Network OS</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divlabel">Capacidad de storage utilizable — 3-Way Copy · Drives 7.68 TB NVMe</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Drives/servidor</th><th>6 nodos</th><th>8 nodos</th><th>10 nodos</th><th>12 nodos</th><th>14 nodos</th><th>16 nodos</th></tr></thead>
+        <tbody>
+          <tr><td>2 drives</td> <td>30 TB</td>  <td>40 TB</td>  <td>50 TB</td>  <td>60 TB</td>  <td>70 TB</td>  <td>81 TB</td></tr>
+          <tr><td>4 drives</td> <td>60 TB</td>  <td>81 TB</td>  <td>101 TB</td> <td>121 TB</td> <td>141 TB</td> <td>162 TB</td></tr>
+          <tr><td>6 drives</td> <td>91 TB</td>  <td>121 TB</td> <td>152 TB</td> <td>182 TB</td> <td>212 TB</td> <td>243 TB</td></tr>
+          <tr><td>8 drives</td> <td>121 TB</td> <td>162 TB</td> <td>202 TB</td> <td>243 TB</td> <td>283 TB</td> <td>324 TB</td></tr>
+          <tr><td>10 drives</td><td>152 TB</td> <td>202 TB</td> <td>253 TB</td> <td>304 TB</td> <td>354 TB</td> <td class="highlight">405 TB</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="divlabel">Integración watsonx</div>
+    <div class="two-col">
+      <div class="panel">
+        <h3>Componentes watsonx</h3>
+        <ul>
+          <li><strong>watsonx.ai</strong> — Entrenamiento e inferencia de modelos con soporte GPU local</li>
+          <li><strong>watsonx.data</strong> — Lakehouse analytics; queries S3 remotas aceleradas hasta 90×</li>
+          <li><strong>watsonx.governance</strong> — Ciclo de vida de AI y cumplimiento normativo</li>
+          <li>Global Data Mesh: acceso a S3, NFS e IBM Storage Scale sin duplicar datos</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Gestión unificada</h3>
+        <ul>
+          <li><strong>Dashboard unificado:</strong> CPU, memoria, storage y red en una interfaz</li>
+          <li><strong>Call Home automático:</strong> notificación proactiva de fallos al soporte IBM</li>
+          <li><strong>Firmware updates</strong> sin downtime — redundancia total garantizada</li>
+          <li><strong>IBM Storage Protect Plus:</strong> backup application-aware para OpenShift y VMware</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:.8rem;color:var(--mgray);text-align:right;">IBM Fusion HCI · ibm.com/products/storage-fusion · Oct 2025</p>
+  </div><!-- /fusion-hci -->
+
+  <!-- ── TAB 2: IBM Fusion ── -->
+  <div id="fusion-sf" class="ftab-panel" style="display:none;">
+    <div class="info-box">
+      <strong>¿Qué es IBM Fusion?</strong><br>
+      IBM Fusion (antes <em>IBM Spectrum Fusion</em>) es el software de gestión de datos container-native que unifica almacenamiento, protección y acceso a datos para entornos <strong>Red Hat OpenShift</strong>. Proporciona almacenamiento persistent nativo para contenedores y Data Virtualization para acceder a datos remotos sin moverlos.
+    </div>
+    <div class="divlabel">Capacidades principales</div>
+    <div class="mod-grid">
+      <div class="mod-card" style="border-top-color:#a78bfa;">
+        <h4>📦 Data Foundation (IBM Storage Scale)</h4>
+        <ul>
+          <li>Almacenamiento persistent de alto rendimiento para OpenShift</li>
+          <li>File, Block y Object en una sola plataforma unificada</li>
+          <li>Basado en IBM Storage Scale (GPFS) — sistema de archivos paralelo</li>
+          <li>Soporte nativo de protocolos: POSIX, NFS, SMB, S3</li>
+          <li>Snapshots y replicación integrados para DR</li>
+        </ul>
+      </div>
+      <div class="mod-card" style="border-top-color:#a78bfa;">
+        <h4>🌐 Global Data Mesh (Data Virtualization)</h4>
+        <ul>
+          <li>Acceso transparente a datos remotos sin moverlos</li>
+          <li>Conecta S3, NFS (Dell/EMC, NetApp), IBM Storage Scale</li>
+          <li>Presenta datos remotos como si fueran locales a los pods OpenShift</li>
+          <li>Compatible con watsonx.data — acelera analytics hasta 90×</li>
+        </ul>
+      </div>
+      <div class="mod-card" style="border-top-color:#a78bfa;">
+        <h4>🛡️ Protección de Datos Integrada</h4>
+        <ul>
+          <li>IBM Storage Protect Plus: backup application-aware para OpenShift</li>
+          <li>Protección de VMs OpenShift Virtualization y VMware</li>
+          <li>Recovery granular: pod, PVC, namespace o cluster completo</li>
+          <li>Políticas de retención automatizadas y cumplimiento</li>
+        </ul>
+      </div>
+      <div class="mod-card" style="border-top-color:#a78bfa;">
+        <h4>⚙️ Operaciones y Gestión</h4>
+        <ul>
+          <li>Dashboard unificado de storage, red y compute</li>
+          <li>Despliegue como operador nativo en OpenShift (OLM)</li>
+          <li>Integración con IBM Storage Insights Pro para analítica predictiva</li>
+          <li>Call Home automático y alertas proactivas</li>
+          <li>Multi-tenant con RBAC por namespace</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divlabel">Casos de uso IBM Fusion</div>
+    <div class="pills">
+      <div class="pill"><span class="pi">📦</span><span><strong>Persistent Storage para OpenShift</strong> — PVCs de alta disponibilidad para aplicaciones stateful</span></div>
+      <div class="pill"><span class="pi">🤖</span><span><strong>AI/ML con watsonx</strong> — Datasets de entrenamiento con acceso concurrente desde GPU pods</span></div>
+      <div class="pill"><span class="pi">🌐</span><span><strong>Data Virtualization</strong> — Une data lakes en S3, NFS e IBM Scale en una vista unificada</span></div>
+      <div class="pill"><span class="pi">🛡️</span><span><strong>DR para contenedores</strong> — Replicación y recovery a nivel de aplicación OpenShift</span></div>
+      <div class="pill"><span class="pi">☁️</span><span><strong>Hybrid Cloud nativo</strong> — Misma interfaz para on-premises, edge y nube pública</span></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--mgray);text-align:right;">IBM Fusion (Spectrum Fusion) · Software container-native para OpenShift · 2026</p>
+  </div><!-- /fusion-sf -->
+
+  <!-- ── TAB 3: Storage Fusion ── -->
+  <div id="fusion-storage" class="ftab-panel" style="display:none;">
+    <div class="info-box">
+      <strong>¿Qué es IBM Storage Fusion?</strong><br>
+      IBM Storage Fusion es la <strong>solución de software HCI</strong> que permite desplegar el stack de IBM Fusion (Data Foundation + Data Virtualization + Backup) en <strong>hardware propio del cliente</strong> (BYOH — Bring Your Own Hardware). Ideal cuando el cliente ya posee infraestructura certificada para OpenShift.
+    </div>
+    <div class="divlabel">Diferencia clave: Fusion HCI vs Storage Fusion (BYOH)</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Característica</th><th>Fusion HCI</th><th>IBM Storage Fusion (BYOH)</th></tr></thead>
+        <tbody>
+          <tr><td>Hardware incluido</td>          <td class="highlight">✓ Pre-integrado (Lenovo / Dell)</td>      <td>✗ Cliente aporta su hardware</td></tr>
+          <tr><td>Software incluido</td>          <td class="highlight">✓ Completo</td>                            <td class="highlight">✓ Completo</td></tr>
+          <tr><td>Configuración</td>              <td>Factory-configured — día 1 operativo</td>                   <td>Instalación sobre HW certificado</td></tr>
+          <tr><td>Certificación hardware</td>     <td>IBM certifica el stack completo</td>                        <td>HW debe ser IBM-certificado para OpenShift</td></tr>
+          <tr><td>Caso de uso principal</td>      <td>Nuevas implementaciones o refresh de HW</td>                <td>Aprovechar inversión existente en servidores</td></tr>
+          <tr><td>Gestión unificada</td>          <td class="highlight">✓ Dashboard IBM integrado</td>            <td class="highlight">✓ Dashboard IBM integrado</td></tr>
+          <tr><td>Soporte GPU para AI</td>        <td class="highlight">✓ NVIDIA H100/H200/L40S / AMD MI210</td>  <td>Según HW certificado disponible</td></tr>
+          <tr><td>watsonx integration</td>        <td class="highlight">✓ Full stack</td>                         <td class="highlight">✓ Full stack</td></tr>
+          <tr><td>Precio</td>                     <td>Hardware + Software</td>                                    <td>Solo Software (subscripción)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="divlabel">Componentes de IBM Storage Fusion</div>
+    <div class="mod-grid">
+      <div class="mod-card" style="border-top-color:#06b6d4;">
+        <h4>📦 Data Foundation</h4>
+        <ul>
+          <li>IBM Storage Scale como motor de almacenamiento (GPFS)</li>
+          <li>File, Block y Object unificados en OpenShift</li>
+          <li>Snapshots, clones y replicación integrados</li>
+          <li>CSI Driver nativo para aprovisionamiento dinámico de PVCs</li>
+        </ul>
+      </div>
+      <div class="mod-card" style="border-top-color:#06b6d4;">
+        <h4>🌐 Data Cataloging</h4>
+        <ul>
+          <li>Catálogo unificado de todos los assets de datos del cluster</li>
+          <li>Búsqueda y clasificación automática de datos por tipo</li>
+          <li>Integración con IBM Watson Knowledge Catalog</li>
+          <li>Gestión de políticas de ciclo de vida de datos</li>
+        </ul>
+      </div>
+      <div class="mod-card" style="border-top-color:#06b6d4;">
+        <h4>🛡️ Backup &amp; Restore</h4>
+        <ul>
+          <li>IBM Storage Protect Plus application-aware</li>
+          <li>Recovery a nivel de pod, PVC, namespace o cluster</li>
+          <li>Integración con políticas de retención WORM</li>
+          <li>Soporte para OpenShift Virtualization y VMware</li>
+        </ul>
+      </div>
+      <div class="mod-card" style="border-top-color:#06b6d4;">
+        <h4>🌍 Global Data Access</h4>
+        <ul>
+          <li>Acceso virtual a S3, NFS y IBM Storage Scale externos</li>
+          <li>Sin necesidad de copiar datos al cluster local</li>
+          <li>Latencia reducida para cargas AI con datos en múltiples sites</li>
+          <li>Compatible con IBM Storage Insights para monitoreo end-to-end</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divlabel">¿Cuándo elegir Storage Fusion (BYOH)?</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Escenario</th><th>¿Aplica Storage Fusion BYOH?</th></tr></thead>
+        <tbody>
+          <tr><td>Cliente ya tiene servidores bare-metal certificados para OpenShift</td>  <td class="highlight">✓ Sí — desplegar Storage Fusion sobre HW existente</td></tr>
+          <tr><td>Presupuesto solo para software (HW comprado ciclo anterior)</td>          <td class="highlight">✓ Sí — subscripción de software únicamente</td></tr>
+          <tr><td>Nuevo proyecto sin infraestructura previa</td>                             <td>Preferir Fusion HCI (pre-integrado, menor riesgo)</td></tr>
+          <tr><td>Necesita GPU servers para AI sin cambiar el storage</td>                  <td>Fusion HCI con nodos GPU adicionales es más simple</td></tr>
+          <tr><td>Entorno regulado con restricciones de proveedores de HW</td>              <td class="highlight">✓ Sí — mayor flexibilidad de hardware</td></tr>
+          <tr><td>Multi-site con distintos HW en cada site</td>                             <td class="highlight">✓ Sí — mismo software, HW diferente por site</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.8rem;color:var(--mgray);text-align:right;">IBM Storage Fusion (BYOH) · Software HCI para hardware certificado · 2026</p>
+  </div><!-- /fusion-storage -->
+
+  <div style="text-align:center;margin-top:1.5rem;">
+    <a href="https://www.ibm.com/products/storage-fusion?lnk=L0G" target="_blank"
+       style="display:inline-block;padding:.75rem 2rem;background:#0043CE;color:#fff;font-weight:700;font-size:.95rem;border-radius:50px;text-decoration:none;letter-spacing:.02em;transition:background .15s;">
+      Conoce más →
+    </a>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <img src="../imagenes/nexsys-logo-dark-2023 2 1 (1).png" alt="Nexsys" class="logo-nexsys">
+    <img src="../imagenes/ibm-brand-symbol-software-computer-logo-black-design-illustration-free-vector.webp" alt="IBM" class="logo-ibm" style="mix-blend-mode:screen; filter:invert(1);">
+  </div>
+
+<script>
+  // Mapeo: sección → categoría padre
+  const catMap = {
+    flash:    'ai',
+    scale:    'ai',
+    fusion:   'hybrid',
+    swai:     'ai',
+    power:    'power',
+    swresil:  'resil',
+    library:  'resil'
+  };
+
+  const sections = ['power','flash','scale','fusion','swai','swresil','library'];
+  const cats     = ['ai','hybrid','resil','power'];
+
+  function resetAll() {
+    sections.forEach(s => document.getElementById('sec-' + s).classList.remove('visible'));
+    cats.forEach(c => {
+      const el = document.getElementById('subnav-' + c);
+      if (el) el.classList.remove('visible');
+    });
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+  }
+
+  function showCat(cat) {
+    resetAll();
+    document.body.classList.add('cat-active');
+    document.getElementById('subnav-' + cat).classList.add('visible');
+    document.querySelector('.cat-btn-' + cat).classList.add('active');
+
+    // Hybrid solo tiene un producto → abrirlo automáticamente
+    if (cat === 'hybrid') {
+      show('fusion', 'hybrid');
+      return;
+    }
+
+    document.getElementById('subnav-' + cat).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function show(id, cat) {
+    const activeCat = cat || catMap[id];
+    resetAll();
+    document.body.classList.add('cat-active');
+
+    // Power es botón directo (sin subnav visible)
+    if (activeCat !== 'power') {
+      document.getElementById('subnav-' + activeCat).classList.add('visible');
+    }
+    document.querySelector('.cat-btn-' + activeCat).classList.add('active');
+
+    // Sección de contenido
+    document.getElementById('sec-' + id).classList.add('visible');
+    if (document.querySelector('.btn-' + id)) {
+      document.querySelector('.btn-' + id).classList.add('active');
+    }
+
+    document.getElementById('sec-' + id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showFusionTab(tabId, btn) {
+    document.querySelectorAll('.ftab-panel').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('.ftab-btn').forEach(b => b.classList.remove('ftab-active'));
+    document.getElementById(tabId).style.display = 'block';
+    btn.classList.add('ftab-active');
+  }
+</script>
+
+</body>
+</html>
